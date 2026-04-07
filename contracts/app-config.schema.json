@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xelseor.local/ado-toolkit/schemas/app-config.schema.json",
+  "title": "ADO Toolkit App Config",
+  "description": "Unified local configuration and artifact index for ADO Toolkit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "currentContext",
+    "settings",
+    "workItems",
+    "pullRequests"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Semantic version for the config contract.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "pat": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Azure DevOps personal access token for the active user.",
+      "minLength": 1
+    },
+    "currentContext": {
+      "$ref": "#/$defs/currentContext"
+    },
+    "settings": {
+      "$ref": "#/$defs/settings"
+    },
+    "workItems": {
+      "type": "array",
+      "description": "Indexed work item exports known to the local toolkit.",
+      "items": {
+        "$ref": "#/$defs/workItemEntry"
+      },
+      "default": []
+    },
+    "pullRequests": {
+      "type": "array",
+      "description": "Indexed pull request sessions and exports known to the local toolkit.",
+      "items": {
+        "$ref": "#/$defs/pullRequestEntry"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "currentContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization",
+        "project"
+      ],
+      "properties": {
+        "organization": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Currently selected Azure DevOps organization."
+        },
+        "project": {
+          "$ref": "#/$defs/projectRef"
+        },
+        "repository": {
+          "$ref": "#/$defs/repositoryRef"
+        }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storageRootPath",
+        "outputRootPath",
+        "promptRootPath",
+        "headerStyle"
+      ],
+      "properties": {
+        "storageRootPath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Root directory for toolkit-owned local storage."
+        },
+        "outputRootPath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Default root directory for generated exports."
+        },
+        "promptRootPath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Default directory for generated AI handoff prompts."
+        },
+        "headerStyle": {
+          "type": "string",
+          "description": "Named header presentation preset for interactive and direct command output.",
+          "default": "default"
+        },
+        "lastViewedArtifact": {
+          "$ref": "#/$defs/artifactPointer"
+        }
+      }
+    },
+    "projectRef": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "description": "Current or stored Azure DevOps project reference."
+    },
+    "repositoryRef": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "localPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "description": "Current or stored Azure DevOps repository reference."
+    },
+    "artifactPointer": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "config",
+            "work-item-json",
+            "work-item-markdown",
+            "pull-request-session",
+            "pull-request-prompt",
+            "pull-request-markdown"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "description": "Reference to a locally stored artifact."
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "createdAt"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "work-item-json",
+            "work-item-markdown",
+            "pull-request-session",
+            "pull-request-prompt",
+            "pull-request-markdown"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute or storage-root-relative file path."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "contentType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Optional MIME-like hint for rendering."
+        }
+      }
+    },
+    "workItemEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "organization",
+        "project",
+        "artifacts",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "project": {
+          "$ref": "#/$defs/projectRef"
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/artifactRef"
+          }
+        },
+        "lastViewedArtifactPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": []
+        }
+      }
+    },
+    "pullRequestEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "organization",
+        "project",
+        "repository",
+        "artifacts",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "project": {
+          "$ref": "#/$defs/projectRef"
+        },
+        "repository": {
+          "$ref": "#/$defs/repositoryRef"
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/artifactRef"
+          }
+        },
+        "lastViewedArtifactPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "reviewState": {
+          "type": "string",
+          "enum": [
+            "not-reviewed",
+            "in-progress",
+            "reviewed",
+            "prompt-generated"
+          ],
+          "default": "not-reviewed"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
