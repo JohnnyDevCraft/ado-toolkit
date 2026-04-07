@@ -8,8 +8,9 @@
 Build the MVP as a single .NET 10 console application that unifies the legacy
 `workitems` and `Commentor` capabilities behind one config model, one command
 surface, and one menu system. The implementation should front-load setup and
-storage foundations, then land work item retrieval, then pull request review
-workflows, then parity and polish work needed to satisfy the constitution.
+storage foundations, then land work item retrieval, then pull request
+retrieval plus persistent thread-state workflows, then parity and polish work
+needed to satisfy the constitution.
 
 ## Technical Context
 
@@ -20,7 +21,7 @@ workflows, then parity and polish work needed to satisfy the constitution.
 **Target Platform**: macOS-first local developer CLI with supportable cross-platform packaging  
 **Project Type**: Single-project CLI application  
 **Performance Goals**: Typical setup and list operations should feel immediate; retrieval commands should stream clear progress and complete within reasonable interactive CLI expectations  
-**Constraints**: Menu and direct command parity is mandatory; AI-facing JSON contracts must be explicit and testable; secrets must not leak in logs or rendered outputs  
+**Constraints**: Menu and direct command parity is mandatory; AI-facing JSON contracts must be explicit and testable; PR thread review state must persist safely across separate commands; secrets must not leak in logs or rendered outputs  
 **Scale/Scope**: Single-user local developer tool consolidating the current work item and pull request apps into one MVP
 
 ## Constitution Check
@@ -32,6 +33,7 @@ workflows, then parity and polish work needed to satisfy the constitution.
 - Pass: Work item retrieval scope includes first-order relationships and comments.
 - Pass: Setup and local storage are treated as core MVP capabilities, not afterthoughts.
 - Pass: Contract and integration testing are required for retrieval and output behavior.
+- Pass: PR workflow is treated as a persisted thread-state model rather than an in-memory-only review loop.
 - Watch item: Confirm the final console UI library before implementation starts if `Spectre.Console` is not the intended package.
 
 ## Project Structure
@@ -137,7 +139,10 @@ current org/project context.
 - `pr list-active`
 - `pr get`
 - repository context resolution
-- PR thread retrieval and local session persistence
+- PR thread retrieval
+- pre-plan PR artifact generation
+- local session persistence
+- persistent thread-state file creation
 - config index updates for stored pull requests
 
 **Depends on**: F1, F2
@@ -149,9 +154,13 @@ current org/project context.
 **Includes**:
 - `pr refresh`
 - `pr review`
+- `pr threads`
+- `pr thread <prId> <threadId>`
+- `pr thread <prId> <threadId> set fix|no-fix`
 - `pr generate-prompt`
 - persisted fix/no-fix decisions
 - optional developer notes
+- prompt-generation validation for unreviewed threads
 - generated prompt artifact writing
 
 **Depends on**: F5
@@ -164,6 +173,7 @@ context.
 **Includes**:
 - `pr list-stored`
 - `pr view`
+- view of stored thread-state data
 - filtered stored history behavior
 - in-console viewing of session/prompt artifacts
 

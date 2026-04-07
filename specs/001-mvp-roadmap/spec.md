@@ -66,25 +66,35 @@ stored artifact references that can later be listed and viewed.
 ### User Story 3 - Pull Request Retrieval, Review, And Prompt Generation (Priority: P1)
 
 As a software engineer, I can retrieve my pull requests, triage threads,
-capture notes, and generate an AI-ready prompt from a stored PR session.
+capture notes, and generate an AI-ready prompt from a stored PR session using
+persistent thread state that survives across separate command invocations.
 
 **Why this priority**: This is the second major capability being consolidated
 from the existing tools and directly supports PR-driven engineering work.
 
 **Independent Test**: Run the PR flows end to end for a known pull request and
-verify the toolkit can import session data, store it, review threads, and
-generate a prompt artifact.
+verify the toolkit can import session data, store a persistent thread-state
+file, update thread decisions one command at a time, and generate a prompt
+artifact only after all threads are classified.
 
 **Acceptance Scenarios**:
 
 1. **Given** a valid working context, **When** the user runs `ado pr list-active`,
    **Then** the toolkit lists active PRs created by the authenticated user.
 2. **Given** a pull request ID and repository context, **When** the user runs
-   `ado pr get <id>`, **Then** the toolkit imports the PR session and stores its
-   artifacts in the unified config index.
-3. **Given** a stored PR session, **When** the user runs `ado pr review <id>`
-   followed by `ado pr generate-prompt <id>`, **Then** the toolkit stores the
-   triage results and writes a prompt artifact.
+   `ado pr get <id>`, **Then** the toolkit imports the PR session, writes a
+   pre-plan PR artifact with stored thread records, and indexes it in unified
+   local storage.
+3. **Given** a stored PR session, **When** the user runs `ado pr threads <id>`
+   and `ado pr thread <id> <threadId> set fix|no-fix`, **Then** the toolkit
+   persists the updated thread review state to disk immediately.
+4. **Given** a stored PR session with unreviewed threads, **When** the user runs
+   `ado pr generate-prompt <id>`, **Then** the toolkit fails clearly and reports
+   which thread IDs still require classification.
+5. **Given** a stored PR session with all threads classified, **When** the user
+   runs `ado pr generate-prompt <id>`, **Then** the toolkit writes the final
+   prompt artifact using only threads marked `fix` while preserving all thread
+   decisions in storage.
 
 ---
 
@@ -107,6 +117,9 @@ command using the same underlying handlers and outcome.
 2. **Given** a direct command completes successfully, **When** the corresponding
    menu path is used, **Then** it produces equivalent stored artifacts and index
    updates.
+3. **Given** a PR thread can be marked interactively, **When** the same thread
+   is updated by direct command, **Then** both paths use the same persistent
+   thread-state model and produce equivalent review results.
 
 ---
 
@@ -164,6 +177,8 @@ and verify the same header and navigation conventions appear consistently.
   file has been deleted or moved?
 - How does the app behave when a PR ID is known but repository context is
   missing?
+- What happens when two commands attempt to update the same stored PR thread
+  file in quick succession?
 
 ## Requirements *(mandatory)*
 
@@ -189,19 +204,23 @@ and verify the same header and navigation conventions appear consistently.
   user.
 - **FR-009**: System MUST retrieve and store pull request sessions including
   comment thread data and generated prompt artifacts.
-- **FR-010**: System MUST support reviewing pull request threads and storing
-  `fix` or `no fix` decisions plus optional developer notes.
-- **FR-011**: System MUST support generating and saving an AI-ready prompt from a
-  stored pull request session.
-- **FR-012**: System MUST support viewing stored pull request artifacts directly
+- **FR-010**: System MUST persist pull request thread review state to disk so PR
+  triage can be advanced one command at a time.
+- **FR-011**: System MUST support listing stored threads for a pull request and
+  showing one specific stored thread in the console.
+- **FR-012**: System MUST support updating one thread at a time to `fix` or
+  `no-fix`, with an optional fix instruction when the selected state is `fix`.
+- **FR-013**: System MUST support generating and saving an AI-ready prompt from a
+  stored pull request session only after all threads are classified.
+- **FR-014**: System MUST support viewing stored pull request artifacts directly
   in the console.
-- **FR-013**: System MUST filter default stored work item and pull request list
+- **FR-015**: System MUST filter default stored work item and pull request list
   views by the currently selected organization and project.
-- **FR-014**: System MUST provide direct-command equivalents for all preserved
+- **FR-016**: System MUST provide direct-command equivalents for all preserved
   menu workflows in MVP scope.
-- **FR-015**: System MUST present a consistent ASCII art header across menu
+- **FR-017**: System MUST present a consistent ASCII art header across menu
   pages and direct command execution paths.
-- **FR-016**: System MUST keep AI-facing JSON contracts stable and explicitly
+- **FR-018**: System MUST keep AI-facing JSON contracts stable and explicitly
   versioned when changed.
 
 ### Key Entities *(include if feature involves data)*
@@ -220,6 +239,9 @@ and verify the same header and navigation conventions appear consistently.
   comments, and provenance.
 - **PullRequestSession**: Stored representation of PR threads, review decisions,
   developer notes, and prompt-generation state.
+- **PullRequestThreadState**: Persistent per-thread record containing the
+  thread payload, review decision, optional fix instruction, and review
+  timestamps.
 
 ## Success Criteria *(mandatory)*
 
@@ -229,11 +251,13 @@ and verify the same header and navigation conventions appear consistently.
   organization/project context in under 5 minutes without manual file editing.
 - **SC-002**: The MVP can retrieve and store a valid work item context package
   and a valid pull request session using one shared config model.
-- **SC-003**: Every MVP menu workflow has a documented direct-command
+- **SC-003**: A stored pull request can be reviewed one thread at a time across
+  multiple command invocations without losing state.
+- **SC-004**: Every MVP menu workflow has a documented direct-command
   equivalent.
-- **SC-004**: Stored work-item and pull-request listings can be filtered to the
+- **SC-005**: Stored work-item and pull-request listings can be filtered to the
   current org/project context with no manual file navigation required.
-- **SC-005**: Work-item and pull-request view commands render stored artifacts
+- **SC-006**: Work-item and pull-request view commands render stored artifacts
   successfully in the console for representative happy-path samples.
 
 ## Assumptions
