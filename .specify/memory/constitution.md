@@ -120,6 +120,11 @@ Required direct commands:
 - `ado pr list-active`
 - `ado pr list-stored`
 - `ado pr get <PullRequestId>`
+- `ado pr threads <PullRequestId>`
+- `ado pr thread <PullRequestId> <ThreadId>`
+- `ado pr thread <PullRequestId> <ThreadId> set fix`
+- `ado pr thread <PullRequestId> <ThreadId> set fix --instruction "<Instruction>"`
+- `ado pr thread <PullRequestId> <ThreadId> set no-fix`
 - `ado pr refresh <PullRequestId>`
 - `ado pr review <PullRequestId>`
 - `ado pr generate-prompt <PullRequestId>`
@@ -157,7 +162,20 @@ Required command behavior:
   - lists locally stored pull request sessions
 - `ado pr get <PullRequestId>`
   - imports or refreshes a pull request by explicit ID using the current
-    organization, project, and repository context
+    organization, project, and repository context and writes a pre-plan pull
+    request artifact containing the thread inventory
+- `ado pr threads <PullRequestId>`
+  - lists the threads currently stored for a pull request so a human or AI can
+    choose which thread to inspect or classify next
+- `ado pr thread <PullRequestId> <ThreadId>`
+  - shows the stored details for one specific pull request thread
+- `ado pr thread <PullRequestId> <ThreadId> set fix`
+  - marks the thread as `fix`
+- `ado pr thread <PullRequestId> <ThreadId> set fix --instruction "<Instruction>"`
+  - marks the thread as `fix` and stores an optional instruction describing how
+    the fix should be approached
+- `ado pr thread <PullRequestId> <ThreadId> set no-fix`
+  - marks the thread as `no fix`
 - `ado pr refresh <PullRequestId>`
   - refreshes the locally stored pull request comment and thread data
 - `ado pr review <PullRequestId>`
@@ -181,6 +199,10 @@ Required interactive menu-equivalent workflows:
 - list active pull requests
 - list stored pull requests
 - get pull request by ID
+- list pull request threads
+- view one pull request thread
+- mark one thread as fix
+- mark one thread as no fix
 - refresh pull request comments
 - review pull request threads
 - generate prompt and write prompt file
@@ -208,10 +230,16 @@ Main Menu
 │   ├── List My Active PRs
 │   ├── List Stored PRs
 │   │   ├── Review Threads
+│   │   ├── List Threads
+│   │   ├── View Thread
+│   │   ├── Mark Thread Fix / No Fix
 │   │   ├── Refresh Comments
 │   │   └── Generate Prompt
 │   └── Get PR By ID
 │       ├── Review Threads
+│       ├── List Threads
+│       ├── View Thread
+│       ├── Mark Thread Fix / No Fix
 │       ├── Refresh Comments
 │       └── Generate Prompt
 │   └── View Pull Request
@@ -255,6 +283,7 @@ Main Menu
   - organization
   - project
   - repository identity when applicable
+  - a persistent stored thread list, or a reference to the file that stores it
   - paths to generated artifacts such as prompt files, session files, markdown,
     or JSON outputs
   - timestamps sufficient to sort and display recent activity
@@ -264,6 +293,23 @@ Main Menu
 - The app MUST support showing the contents of stored artifacts directly in the
   console when the user selects a view action from the menu or invokes the
   equivalent direct command.
+- Pull request workflows MUST support thread-level state transitions driven by
+  either the interactive review flow or direct commands.
+- Pull request review state MUST be persisted to disk after each thread update
+  so the workflow can continue safely across separate command invocations.
+- Each stored pull request thread record MUST remain present in the stored PR
+  file after review rather than being removed from the list.
+- A stored thread decision MUST support:
+  - `unreviewed`
+  - `fix`
+  - `no-fix`
+- A thread marked `fix` MUST support an optional instruction string that can be
+  supplied by a human or by an AI acting as the user's intermediary.
+- A thread marked `no-fix` MUST remain in the stored PR file with its decision
+  recorded explicitly.
+- Prompt-generation logic MUST derive the final fix plan from threads whose
+  stored decision is `fix`, while still being able to report `no-fix` and
+  `unreviewed` state for auditability and follow-up.
 
 ### Console Presentation Rules
 
@@ -290,6 +336,8 @@ Quality gates for feature work:
   flows
 - help text and menu affordances MUST be updated when commands change
 - setup and bootstrap behavior MUST be validated from a fresh-user perspective
+- pull request prompt generation MUST fail clearly when unreviewed threads
+  remain and MUST report which threads still require classification
 
 ## Governance
 This constitution supersedes lower-level project habits when conflicts arise.

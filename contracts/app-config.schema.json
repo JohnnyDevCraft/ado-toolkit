@@ -366,6 +366,14 @@
           ],
           "default": "not-reviewed"
         },
+        "threadsFilePath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Path to the persistent stored PR thread state file used by thread-level review commands."
+        },
         "createdAt": {
           "type": "string",
           "format": "date-time"
