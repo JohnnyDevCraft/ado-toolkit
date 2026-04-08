@@ -42,6 +42,17 @@ public sealed class ContextSelectionCommandTests
 
     private sealed class FakeContextClient : AdoToolkit.Integrations.IAzureDevOpsContextClient
     {
+        public Task<AuthenticationCheckResult> ValidatePatAsync(string pat, CancellationToken cancellationToken = default)
+            => Task.FromResult(new AuthenticationCheckResult
+            {
+                IsSuccess = true,
+                FailureCategory = AuthenticationFailureCategory.None,
+                SummaryMessage = "PAT test succeeded.",
+                Guidance = "Continue.",
+                CapabilityChecks = [],
+                Organizations = [new AdoOrganizationInfo { Name = "org-one" }]
+            });
+
         public Task<IReadOnlyList<AdoOrganizationInfo>> ListOrganizationsAsync(string pat, CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<AdoOrganizationInfo>>([new() { Name = "org-one" }]);
 

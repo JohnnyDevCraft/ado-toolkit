@@ -10,9 +10,11 @@ public sealed class PresentationConsistencyTests
         var renderer = new AppHeaderRenderer();
         var lines = renderer.GetHeaderLines();
 
-        Assert.Equal(6, lines.Count);
+        Assert.Equal(8, lines.Count);
         Assert.Contains("____", lines[0], StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("Bridge Azure DevOps context", lines[^1]);
+        Assert.Contains("Bridge Azure DevOps context", lines[5]);
+        Assert.Contains("Designed By: JohnnyDevCraft | Xelseor LLC 2026", lines[6]);
+        Assert.Contains("Version: 0.1.1 | Build Date: 04/08/2026", lines[7]);
     }
 
     [Fact]

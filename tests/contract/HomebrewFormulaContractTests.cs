@@ -42,8 +42,8 @@ public sealed class HomebrewFormulaContractTests
         Assert.Contains("class AdoToolkit < Formula", formula);
         Assert.Contains("bin.install \"ado\"", formula);
         Assert.Contains("assert_match \"ADO Toolkit\", shell_output(\"#{bin}/ado --help\")", formula);
-        Assert.Contains("ado-toolkit-0.1.0-macos-arm64.tar.gz", formula);
-        Assert.Contains("ado-toolkit-0.1.0-macos-x64.tar.gz", formula);
+        Assert.Contains("ado-toolkit-0.1.1-macos-arm64.tar.gz", formula);
+        Assert.Contains("ado-toolkit-0.1.1-macos-x64.tar.gz", formula);
         Assert.DoesNotContain("__VERSION__", formula);
         Assert.DoesNotContain("__ARM64_SHA__", formula);
         Assert.DoesNotContain("__X64_SHA__", formula);

@@ -51,7 +51,7 @@ public sealed class CommandRouter
 
             if (args[0].Equals("--version", StringComparison.OrdinalIgnoreCase) || args[0].Equals("-v", StringComparison.OrdinalIgnoreCase))
             {
-                _host.Output.WriteInfo("ado 0.1.0");
+                _host.Output.WriteInfo("ado 0.1.1");
                 return 0;
             }
 

@@ -20,8 +20,9 @@ public sealed class AppHost
         HeaderRenderer = new AppHeaderRenderer();
         PageLayout = new PageLayout(HeaderRenderer);
         Output = new ConsoleOutputService();
+        SetupInteraction = new SpectreSetupInteraction();
         CurrentContextService = new CurrentContextService(ConfigService, ContextClient);
-        SetupWorkflowService = new SetupWorkflowService(CurrentContextService, ConfigService);
+        SetupWorkflowService = new SetupWorkflowService(CurrentContextService, ConfigService, Output, SetupInteraction);
         WorkItemReferenceParser = new WorkItemReferenceParser();
         WorkItemRetrievalService = new WorkItemRetrievalService(WorkItemClient, WorkItemReferenceParser);
         WorkItemArtifactWriter = new WorkItemArtifactWriter();
@@ -65,6 +66,8 @@ public sealed class AppHost
     public PageLayout PageLayout { get; }
 
     public ConsoleOutputService Output { get; }
+
+    public ISetupInteraction SetupInteraction { get; }
 
     public CurrentContextService CurrentContextService { get; }
 

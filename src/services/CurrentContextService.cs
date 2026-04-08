@@ -18,7 +18,18 @@ public sealed class CurrentContextService
 
     public async Task SetPatAsync(AppConfig config, string pat, CancellationToken cancellationToken = default)
     {
-        config.Pat = pat.Trim();
+        config.Pat = NormalizePat(pat);
+        await _configService.SaveAsync(config, cancellationToken);
+    }
+
+    public Task<AuthenticationCheckResult> ValidatePatAsync(string pat, CancellationToken cancellationToken = default)
+    {
+        return _contextClient.ValidatePatAsync(NormalizePat(pat), cancellationToken);
+    }
+
+    public async Task SaveValidatedPatAsync(AppConfig config, string pat, CancellationToken cancellationToken = default)
+    {
+        config.Pat = NormalizePat(pat);
         await _configService.SaveAsync(config, cancellationToken);
     }
 
@@ -95,5 +106,10 @@ public sealed class CurrentContextService
                 .AddChoices(projects.Select(item => item.Name ?? string.Empty)));
 
         return projects.First(item => string.Equals(item.Name, choice, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string NormalizePat(string pat)
+    {
+        return pat.Trim();
     }
 }

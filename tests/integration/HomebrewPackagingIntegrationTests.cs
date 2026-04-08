@@ -37,11 +37,11 @@ public sealed class HomebrewPackagingIntegrationTests
         await process.WaitForExitAsync();
 
         Assert.True(process.ExitCode == 0, $"Packaging script failed.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}");
-        Assert.Contains("ado-toolkit-0.1.0-macos-arm64.tar.gz", stdout);
-        Assert.Contains("ado-toolkit-0.1.0-macos-x64.tar.gz", stdout);
+        Assert.Contains("ado-toolkit-0.1.1-macos-arm64.tar.gz", stdout);
+        Assert.Contains("ado-toolkit-0.1.1-macos-x64.tar.gz", stdout);
 
-        Assert.True(File.Exists(Path.Combine(distDir, "ado-toolkit-0.1.0-macos-arm64.tar.gz")));
-        Assert.True(File.Exists(Path.Combine(distDir, "ado-toolkit-0.1.0-macos-x64.tar.gz")));
+        Assert.True(File.Exists(Path.Combine(distDir, "ado-toolkit-0.1.1-macos-arm64.tar.gz")));
+        Assert.True(File.Exists(Path.Combine(distDir, "ado-toolkit-0.1.1-macos-x64.tar.gz")));
         Assert.True(File.Exists(Path.Combine(distDir, "ado-toolkit.rb")));
     }
 }

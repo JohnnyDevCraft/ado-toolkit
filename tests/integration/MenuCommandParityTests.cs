@@ -4,6 +4,7 @@ using AdoToolkit.Integrations;
 using AdoToolkit.Models;
 using AdoToolkit.Models.PullRequests;
 using AdoToolkit.Models.WorkItems;
+using AdoToolkit.Presentation;
 using AdoToolkit.Services;
 
 namespace AdoToolkit.Tests.Integration;
@@ -29,7 +30,7 @@ public sealed class MenuCommandParityTests
         var command = new PullRequestCommands(importService, storage, reviewService, new ArtifactViewerService());
         var history = new PullRequestHistoryCommands(configService, storage, new ArtifactViewerService());
         var bridge = new CommandWorkflowBridge(
-            new SetupCommand(new SetupWorkflowService(new CurrentContextService(configService, new FakeContextClient()), configService)),
+            new SetupCommand(new SetupWorkflowService(new CurrentContextService(configService, new FakeContextClient()), configService, new ConsoleOutputService(), new FakeSetupInteraction())),
             new ConfigCommands(new CurrentContextService(configService, new FakeContextClient())),
             new WorkItemCommands(new WorkItemRetrievalService(new FakeWorkItemClient(), new WorkItemReferenceParser()), new WorkItemArtifactWriter(), new JsonFileStore(), new WorkItemIndexService(configService)),
             new WorkItemHistoryCommands(new ArtifactViewerService()),
@@ -70,7 +71,7 @@ public sealed class MenuCommandParityTests
             new WorkItemIndexService(configService));
 
         var bridge = new CommandWorkflowBridge(
-            new SetupCommand(new SetupWorkflowService(new CurrentContextService(configService, new FakeContextClient()), configService)),
+            new SetupCommand(new SetupWorkflowService(new CurrentContextService(configService, new FakeContextClient()), configService, new ConsoleOutputService(), new FakeSetupInteraction())),
             new ConfigCommands(new CurrentContextService(configService, new FakeContextClient())),
             workItemCommands,
             new WorkItemHistoryCommands(new ArtifactViewerService()),
@@ -92,6 +93,17 @@ public sealed class MenuCommandParityTests
 
     private sealed class FakeContextClient : IAzureDevOpsContextClient
     {
+        public Task<AuthenticationCheckResult> ValidatePatAsync(string pat, CancellationToken cancellationToken = default)
+            => Task.FromResult(new AuthenticationCheckResult
+            {
+                IsSuccess = true,
+                FailureCategory = AuthenticationFailureCategory.None,
+                SummaryMessage = "PAT test succeeded.",
+                Guidance = "Continue.",
+                CapabilityChecks = [new PatCapabilityCheck { Name = "Authenticated profile lookup", Operation = "Resolve the authenticated Azure DevOps profile", Passed = true }],
+                Organizations = [new AdoOrganizationInfo { Name = "org-one" }]
+            });
+
         public Task<IReadOnlyList<AdoOrganizationInfo>> ListOrganizationsAsync(string pat, CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<AdoOrganizationInfo>>([new AdoOrganizationInfo { Name = "org-one" }]);
 
@@ -139,5 +151,16 @@ public sealed class MenuCommandParityTests
 
         public Task<IReadOnlyList<WorkItemComment>> GetCommentsAsync(string organization, string projectName, string pat, int workItemId, CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<WorkItemComment>>([new WorkItemComment { CommentId = "1", RenderedText = "Comment one" }]);
+    }
+
+    private sealed class FakeSetupInteraction : ISetupInteraction
+    {
+        public string PromptSecret(string prompt) => "pat";
+
+        public string PromptText(string prompt) => "/tmp";
+
+        public void WaitForAcknowledgement(string message)
+        {
+        }
     }
 }
