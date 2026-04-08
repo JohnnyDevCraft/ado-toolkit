@@ -60,6 +60,11 @@ for mapping in "${TARGETS[@]}"; do
   rid="${mapping##*:}"
   publish_dir="$DIST_DIR/publish/$target"
   archive_root="$DIST_DIR/staging/$target/ado-toolkit"
+  archive_path="$DIST_DIR/ado-toolkit-${VERSION}-${target}.tar.gz"
+
+  if [[ "$SKIP_PUBLISH" == "true" && -f "$archive_path" ]]; then
+    continue
+  fi
 
   if [[ "$SKIP_PUBLISH" != "true" ]]; then
     rm -rf "$publish_dir"
@@ -83,7 +88,6 @@ for mapping in "${TARGETS[@]}"; do
   cp "$publish_dir/ado" "$archive_root/ado"
   cp "$ROOT_DIR/README.md" "$archive_root/README.md"
 
-  archive_path="$DIST_DIR/ado-toolkit-${VERSION}-${target}.tar.gz"
   tar -C "$DIST_DIR/staging/$target" -czf "$archive_path" "ado-toolkit"
 done
 
