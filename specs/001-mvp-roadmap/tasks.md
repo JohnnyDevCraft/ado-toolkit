@@ -67,6 +67,7 @@ implementation and testing of each story.
 - [X] T015 [US1] Implement the guided setup workflow and persisted settings updates in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/SetupCommand.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/SetupWorkflowService.cs
 - [X] T016 [US1] Implement `ado config set-pat`, `ado config set-org`, and `ado config set-project` direct commands plus interactive fallbacks in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/ConfigCommands.cs
 - [X] T017 [US1] Implement current-context selection and config save behavior for PAT/org/project/path settings in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/CurrentContextService.cs
+- [X] T017A [US1] Implement `ado config set-repo <RepoName> <RepoPath>` and `ado config reset` so repository path is persisted and active context can be cleared without deleting stored indexes in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/ConfigCommands.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/CurrentContextService.cs
 
 **Checkpoint**: Setup and working context are fully functional and testable independently
 
@@ -80,16 +81,16 @@ implementation and testing of each story.
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T018 [P] [US2] Add contract tests for the normalized work-item JSON output in /Users/john/Source/repos/xelseor/ado-toolkit/tests/contract/WorkItemGraphContractTests.cs
-- [ ] T019 [P] [US2] Add integration tests for work-item retrieval, relation traversal, and comment capture in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/WorkItemRetrievalIntegrationTests.cs
+- [X] T018 [P] [US2] Add contract tests for the normalized work-item JSON output in /Users/john/Source/repos/xelseor/ado-toolkit/tests/contract/WorkItemGraphContractTests.cs
+- [X] T019 [P] [US2] Add integration tests for work-item retrieval, relation traversal, and comment capture in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/WorkItemRetrievalIntegrationTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Port the legacy work-item models needed for graph retrieval from /Users/john/Source/repos/xelseor/workitems/Models/NormalizedWorkItem.cs, /Users/john/Source/repos/xelseor/workitems/Models/RelatedWorkItem.cs, /Users/john/Source/repos/xelseor/workitems/Models/RetrievalResult.cs, /Users/john/Source/repos/xelseor/workitems/Models/WorkItemComment.cs, and /Users/john/Source/repos/xelseor/workitems/Models/WorkItemReference.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/models/workitems/
-- [ ] T021 [US2] Port and adapt the relationship and comment retrieval logic from /Users/john/Source/repos/xelseor/workitems/Services/AzureDevOpsClient.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/integrations/AzureDevOpsWorkItemClient.cs
-- [ ] T022 [US2] Port and adapt the reference parsing and first-order related-item discovery logic from /Users/john/Source/repos/xelseor/workitems/Services/ReferenceParser.cs and /Users/john/Source/repos/xelseor/workitems/Services/WorkItemRetrievalService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemReferenceParser.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemRetrievalService.cs
-- [ ] T023 [US2] Port and adapt markdown export behavior from /Users/john/Source/repos/xelseor/workitems/Services/MarkdownExportService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemArtifactWriter.cs
-- [ ] T024 [US2] Implement `ado work-item get` command handling, artifact indexing, and `--out` override behavior in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/WorkItemCommands.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemIndexService.cs
+- [X] T020 [P] [US2] Port the legacy work-item models needed for graph retrieval from /Users/john/Source/repos/xelseor/workitems/Models/NormalizedWorkItem.cs, /Users/john/Source/repos/xelseor/workitems/Models/RelatedWorkItem.cs, /Users/john/Source/repos/xelseor/workitems/Models/RetrievalResult.cs, /Users/john/Source/repos/xelseor/workitems/Models/WorkItemComment.cs, and /Users/john/Source/repos/xelseor/workitems/Models/WorkItemReference.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/models/workitems/
+- [X] T021 [US2] Port and adapt the relationship and comment retrieval logic from /Users/john/Source/repos/xelseor/workitems/Services/AzureDevOpsClient.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/integrations/AzureDevOpsWorkItemClient.cs
+- [X] T022 [US2] Port and adapt the reference parsing and first-order related-item discovery logic from /Users/john/Source/repos/xelseor/workitems/Services/ReferenceParser.cs and /Users/john/Source/repos/xelseor/workitems/Services/WorkItemRetrievalService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemReferenceParser.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemRetrievalService.cs
+- [X] T023 [US2] Port and adapt markdown export behavior from /Users/john/Source/repos/xelseor/workitems/Services/MarkdownExportService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemArtifactWriter.cs
+- [X] T024 [US2] Implement `ado work-item get` command handling, artifact indexing, and `--out` override behavior in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/WorkItemCommands.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/WorkItemIndexService.cs
 
 **Checkpoint**: Work item retrieval and artifact indexing are fully functional and testable independently
 
@@ -103,19 +104,19 @@ implementation and testing of each story.
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T025 [P] [US3] Add contract tests for stored PR session and thread-state serialization in /Users/john/Source/repos/xelseor/ado-toolkit/tests/contract/PullRequestSessionContractTests.cs
-- [ ] T026 [P] [US3] Add integration tests for PR retrieval, thread listing, thread updates, and prompt-generation gating in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/PullRequestWorkflowIntegrationTests.cs
+- [X] T025 [P] [US3] Add contract tests for stored PR session and thread-state serialization in /Users/john/Source/repos/xelseor/ado-toolkit/tests/contract/PullRequestSessionContractTests.cs
+- [X] T026 [P] [US3] Add integration tests for PR retrieval, thread listing, thread updates, and prompt-generation gating in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/PullRequestWorkflowIntegrationTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T027 [P] [US3] Port the legacy PR models needed for retrieval and stored review state from /Users/john/Source/repos/xelseor/Commentor/Models/AdoAuthenticatedUser.cs, /Users/john/Source/repos/xelseor/Commentor/Models/AdoProjectInfo.cs, /Users/john/Source/repos/xelseor/Commentor/Models/AdoRepositoryInfo.cs, /Users/john/Source/repos/xelseor/Commentor/Models/AdoPullRequestInfo.cs, /Users/john/Source/repos/xelseor/Commentor/Models/PullRequestThreadRecord.cs, /Users/john/Source/repos/xelseor/Commentor/Models/PullRequestCommentRecord.cs, and /Users/john/Source/repos/xelseor/Commentor/Models/PullRequestSession.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/models/pullrequests/
-- [ ] T028 [US3] Port and adapt PR retrieval logic from /Users/john/Source/repos/xelseor/Commentor/Services/AzureDevOpsClient.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/integrations/AzureDevOpsPullRequestClient.cs
-- [ ] T029 [US3] Implement persistent PR session and thread-state storage by adapting /Users/john/Source/repos/xelseor/Commentor/Services/LocalStorageService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestStorageService.cs
-- [ ] T030 [P] [US3] Port and adapt prompt-generation logic from /Users/john/Source/repos/xelseor/Commentor/Services/PromptBuilder.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestPromptBuilder.cs
-- [ ] T031 [P] [US3] Port and adapt repository excerpt generation from /Users/john/Source/repos/xelseor/Commentor/Services/CodeExcerptService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestCodeExcerptService.cs
-- [ ] T032 [US3] Implement `ado pr get`, `ado pr list-active`, and pre-plan PR artifact generation in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestCommands.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestImportService.cs
-- [ ] T033 [US3] Implement `ado pr threads`, `ado pr thread <prId> <threadId>`, and `ado pr thread <prId> <threadId> set fix|no-fix --instruction ...` in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestThreadCommands.cs
-- [ ] T034 [US3] Implement `ado pr refresh`, `ado pr review`, and `ado pr generate-prompt` with unreviewed-thread validation in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestReviewService.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestReviewCommands.cs
+- [X] T027 [P] [US3] Port the legacy PR models needed for retrieval and stored review state from /Users/john/Source/repos/xelseor/Commentor/Models/AdoAuthenticatedUser.cs, /Users/john/Source/repos/xelseor/Commentor/Models/AdoProjectInfo.cs, /Users/john/Source/repos/xelseor/Commentor/Models/AdoRepositoryInfo.cs, /Users/john/Source/repos/xelseor/Commentor/Models/AdoPullRequestInfo.cs, /Users/john/Source/repos/xelseor/Commentor/Models/PullRequestThreadRecord.cs, /Users/john/Source/repos/xelseor/Commentor/Models/PullRequestCommentRecord.cs, and /Users/john/Source/repos/xelseor/Commentor/Models/PullRequestSession.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/models/pullrequests/
+- [X] T028 [US3] Port and adapt PR retrieval logic from /Users/john/Source/repos/xelseor/Commentor/Services/AzureDevOpsClient.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/integrations/AzureDevOpsPullRequestClient.cs
+- [X] T029 [US3] Implement persistent PR session and thread-state storage by adapting /Users/john/Source/repos/xelseor/Commentor/Services/LocalStorageService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestStorageService.cs
+- [X] T030 [P] [US3] Port and adapt prompt-generation logic from /Users/john/Source/repos/xelseor/Commentor/Services/PromptBuilder.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestPromptBuilder.cs
+- [X] T031 [P] [US3] Port and adapt repository excerpt generation from /Users/john/Source/repos/xelseor/Commentor/Services/CodeExcerptService.cs into /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestCodeExcerptService.cs
+- [X] T032 [US3] Implement `ado pr get`, `ado pr list-active`, and pre-plan PR artifact generation in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestCommands.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestImportService.cs
+- [X] T033 [US3] Implement `ado pr threads`, `ado pr thread <prId> <threadId>`, and `ado pr thread <prId> <threadId> set fix|no-fix --instruction ...` in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestThreadCommands.cs
+- [X] T034 [US3] Implement `ado pr refresh`, `ado pr review`, and `ado pr generate-prompt` with unreviewed-thread validation in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/PullRequestReviewService.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestReviewCommands.cs
 
 **Checkpoint**: Pull request import, thread-by-thread review, and prompt generation are fully functional and testable independently
 
@@ -129,13 +130,13 @@ implementation and testing of each story.
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T035 [P] [US4] Add integration tests that compare direct-command and menu-driven results for setup, work-item retrieval, and PR thread updates in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/MenuCommandParityTests.cs
+- [X] T035 [P] [US4] Add integration tests that compare direct-command and menu-driven results for setup, work-item retrieval, and PR thread updates in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/MenuCommandParityTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T036 [US4] Implement the main menu tree and routing over shared application services in /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/MainMenuWorkflow.cs
-- [ ] T037 [US4] Refactor command handlers and menu actions to use shared workflow services for setup, work-items, PR import, thread updates, and prompt generation in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/CommandWorkflowBridge.cs
-- [ ] T038 [US4] Implement consolidated help output documenting both interactive and direct command paths in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/HelpCommand.cs
+- [X] T036 [US4] Implement the main menu tree and routing over shared application services in /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/MainMenuWorkflow.cs
+- [X] T037 [US4] Refactor command handlers and menu actions to use shared workflow services for setup, work-items, PR import, thread updates, and prompt generation in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/CommandWorkflowBridge.cs
+- [X] T038 [US4] Implement consolidated help output documenting both interactive and direct command paths in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/HelpCommand.cs
 
 **Checkpoint**: Menu and direct command parity are functional and testable independently
 
@@ -149,13 +150,13 @@ implementation and testing of each story.
 
 ### Tests for User Story 5 ⚠️
 
-- [ ] T039 [P] [US5] Add integration tests for filtered stored-history and in-console view behavior in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/StoredHistoryFilteringTests.cs
+- [X] T039 [P] [US5] Add integration tests for filtered stored-history and in-console view behavior in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/StoredHistoryFilteringTests.cs
 
 ### Implementation for User Story 5
 
-- [ ] T040 [US5] Implement filtered work-item history, `ado work-item last`, and `ado work-item view` in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/WorkItemHistoryCommands.cs
-- [ ] T041 [US5] Implement filtered PR history, `ado pr list-stored`, and `ado pr view` in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestHistoryCommands.cs
-- [ ] T042 [US5] Implement artifact viewing and missing-file recovery messaging for stored markdown, JSON, session, and prompt files in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/ArtifactViewerService.cs
+- [X] T040 [US5] Implement filtered work-item history, `ado work-item last`, and `ado work-item view` in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/WorkItemHistoryCommands.cs
+- [X] T041 [US5] Implement filtered PR history, `ado pr list-stored`, and `ado pr view` in /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/PullRequestHistoryCommands.cs
+- [X] T042 [US5] Implement artifact viewing and missing-file recovery messaging for stored markdown, JSON, session, and prompt files in /Users/john/Source/repos/xelseor/ado-toolkit/src/services/ArtifactViewerService.cs
 
 **Checkpoint**: Stored history and console viewing are functional and testable independently
 
@@ -169,12 +170,12 @@ implementation and testing of each story.
 
 ### Tests for User Story 6 ⚠️
 
-- [ ] T043 [P] [US6] Add integration tests for header rendering and presentation consistency across direct and menu flows in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/PresentationConsistencyTests.cs
+- [X] T043 [P] [US6] Add integration tests for header rendering and presentation consistency across direct and menu flows in /Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/PresentationConsistencyTests.cs
 
 ### Implementation for User Story 6
 
-- [ ] T044 [US6] Implement the final shared ASCII art header and page framing behavior in /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/AppHeaderRenderer.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/PageLayout.cs
-- [ ] T045 [US6] Apply consistent status, error, and completion presentation across setup, work-item, PR, help, and view commands in /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/ConsoleOutputService.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/Program.cs
+- [X] T044 [US6] Implement the final shared ASCII art header and page framing behavior in /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/AppHeaderRenderer.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/PageLayout.cs
+- [X] T045 [US6] Apply consistent status, error, and completion presentation across setup, work-item, PR, help, and view commands in /Users/john/Source/repos/xelseor/ado-toolkit/src/presentation/ConsoleOutputService.cs and /Users/john/Source/repos/xelseor/ado-toolkit/src/Program.cs
 
 **Checkpoint**: Presentation is cohesive and testable independently
 
@@ -184,9 +185,9 @@ implementation and testing of each story.
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T046 [P] Document the consolidated legacy-code reuse map and migration notes in /Users/john/Source/repos/xelseor/ado-toolkit/specs/001-mvp-roadmap/reuse-notes.md
-- [ ] T047 Validate the Homebrew-friendly executable flow, direct-command help output, and setup quick path in /Users/john/Source/repos/xelseor/ado-toolkit/README.md and /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/HelpCommand.cs
-- [ ] T048 Run full contract, integration, and unit test suites and fix any cross-story regressions in /Users/john/Source/repos/xelseor/ado-toolkit/tests/
+- [X] T046 [P] Document the consolidated legacy-code reuse map and migration notes in /Users/john/Source/repos/xelseor/ado-toolkit/specs/001-mvp-roadmap/reuse-notes.md
+- [X] T047 Validate the Homebrew-friendly executable flow, direct-command help output, and setup quick path in /Users/john/Source/repos/xelseor/ado-toolkit/README.md and /Users/john/Source/repos/xelseor/ado-toolkit/src/commands/HelpCommand.cs
+- [X] T048 Run full contract, integration, and unit test suites and fix any cross-story regressions in /Users/john/Source/repos/xelseor/ado-toolkit/tests/
 
 ---
 

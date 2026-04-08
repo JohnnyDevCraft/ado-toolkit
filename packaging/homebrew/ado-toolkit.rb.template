@@ -1,0 +1,23 @@
+class AdoToolkit < Formula
+  desc "__DESC__"
+  homepage "__HOMEPAGE__"
+  version "__VERSION__"
+
+  on_macos do
+    if Hardware::CPU.arm?
+      url "__RELEASE_BASE_URL__/ado-toolkit-__VERSION__-macos-arm64.tar.gz"
+      sha256 "__ARM64_SHA__"
+    else
+      url "__RELEASE_BASE_URL__/ado-toolkit-__VERSION__-macos-x64.tar.gz"
+      sha256 "__X64_SHA__"
+    end
+  end
+
+  def install
+    bin.install "ado"
+  end
+
+  test do
+    assert_match "ADO Toolkit", shell_output("#{bin}/ado --help")
+  end
+end

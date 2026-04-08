@@ -25,6 +25,21 @@ public sealed class ContextSelectionCommandTests
         Assert.Equal("2", config.CurrentContext.Project?.Id);
     }
 
+    [Fact]
+    public async Task Set_repo_stores_repository_name_and_path()
+    {
+        var home = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        var configService = new AppConfigService(new AppPaths(home), new JsonFileStore(), new SchemaValidationService());
+        var currentContextService = new CurrentContextService(configService, new FakeContextClient());
+        var commands = new ConfigCommands(currentContextService);
+        var config = await configService.LoadOrCreateAsync();
+
+        await commands.SetRepositoryAsync(config, "repo-one", "/tmp/repo-one");
+
+        Assert.Equal("repo-one", config.CurrentContext.Repository?.Name);
+        Assert.Equal("/tmp/repo-one", config.CurrentContext.Repository?.LocalPath);
+    }
+
     private sealed class FakeContextClient : AdoToolkit.Integrations.IAzureDevOpsContextClient
     {
         public Task<IReadOnlyList<AdoOrganizationInfo>> ListOrganizationsAsync(string pat, CancellationToken cancellationToken = default)

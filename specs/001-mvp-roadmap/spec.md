@@ -10,7 +10,8 @@
 ### User Story 1 - First-Run Setup And Working Context (Priority: P1)
 
 As a software engineer, I can install ADO Toolkit, configure my PAT, choose my
-organization and project, and leave the app with a valid default working
+organization and project, manage my current repository context, reset my active
+configuration when needed, and leave the app with a valid default working
 context.
 
 **Why this priority**: Nothing else is usable until the toolkit can establish a
@@ -32,6 +33,12 @@ without re-prompting.
 3. **Given** a selected organization and saved PAT, **When** the user runs
    `ado config set-project`, **Then** the app can list accessible projects for
    selection.
+4. **Given** a current repository path is known, **When** the user runs
+   `ado config set-repo <name> <path>`, **Then** the app stores the repository
+   name and local path as part of the current context.
+5. **Given** stored work items and pull requests already exist, **When** the
+   user runs `ado config reset`, **Then** the app clears PAT and active
+   org/project/repository context without deleting the stored artifact indexes.
 
 ---
 
@@ -193,34 +200,39 @@ and verify the same header and navigation conventions appear consistently.
 - **FR-004**: System MUST allow the user to set the current project either by
   direct project identifier or by choosing from projects visible to the PAT in
   the selected organization.
+- **FR-005**: System MUST allow the user to set the current repository name and
+  repository path for workflows that depend on local repository context.
 - **FR-005**: System MUST retrieve work item context including the root work
   item, parent items, child items, first-level related items, and comments for
   each included item.
-- **FR-006**: System MUST persist generated work item artifacts and index them by
+- **FR-006**: System MUST support a reset command that clears PAT and active
+  org/project/repository context without deleting stored work item or pull
+  request indexes.
+- **FR-007**: System MUST persist generated work item artifacts and index them by
   work item ID, organization, and project.
-- **FR-007**: System MUST support viewing stored work item artifacts directly in
+- **FR-008**: System MUST support viewing stored work item artifacts directly in
   the console.
-- **FR-008**: System MUST list active pull requests created by the authenticated
+- **FR-009**: System MUST list active pull requests created by the authenticated
   user.
-- **FR-009**: System MUST retrieve and store pull request sessions including
+- **FR-010**: System MUST retrieve and store pull request sessions including
   comment thread data and generated prompt artifacts.
-- **FR-010**: System MUST persist pull request thread review state to disk so PR
+- **FR-011**: System MUST persist pull request thread review state to disk so PR
   triage can be advanced one command at a time.
-- **FR-011**: System MUST support listing stored threads for a pull request and
+- **FR-012**: System MUST support listing stored threads for a pull request and
   showing one specific stored thread in the console.
-- **FR-012**: System MUST support updating one thread at a time to `fix` or
+- **FR-013**: System MUST support updating one thread at a time to `fix` or
   `no-fix`, with an optional fix instruction when the selected state is `fix`.
-- **FR-013**: System MUST support generating and saving an AI-ready prompt from a
+- **FR-014**: System MUST support generating and saving an AI-ready prompt from a
   stored pull request session only after all threads are classified.
-- **FR-014**: System MUST support viewing stored pull request artifacts directly
+- **FR-015**: System MUST support viewing stored pull request artifacts directly
   in the console.
-- **FR-015**: System MUST filter default stored work item and pull request list
+- **FR-016**: System MUST filter default stored work item and pull request list
   views by the currently selected organization and project.
-- **FR-016**: System MUST provide direct-command equivalents for all preserved
+- **FR-017**: System MUST provide direct-command equivalents for all preserved
   menu workflows in MVP scope.
-- **FR-017**: System MUST present a consistent ASCII art header across menu
+- **FR-018**: System MUST present a consistent ASCII art header across menu
   pages and direct command execution paths.
-- **FR-018**: System MUST keep AI-facing JSON contracts stable and explicitly
+- **FR-019**: System MUST keep AI-facing JSON contracts stable and explicitly
   versioned when changed.
 
 ### Key Entities *(include if feature involves data)*
@@ -229,6 +241,8 @@ and verify the same header and navigation conventions appear consistently.
   application.
 - **CurrentContext**: Active organization, project, and optional repository
   selection that scopes default behavior.
+- **RepositoryRef**: Current or stored repository identity including local path
+  when needed for PR review workflows.
 - **WorkItemEntry**: Indexed local record for a retrieved work item and its
   generated artifacts.
 - **PullRequestEntry**: Indexed local record for a retrieved pull request session
@@ -249,15 +263,17 @@ and verify the same header and navigation conventions appear consistently.
 
 - **SC-001**: A first-time user can complete setup and establish a valid
   organization/project context in under 5 minutes without manual file editing.
-- **SC-002**: The MVP can retrieve and store a valid work item context package
+- **SC-002**: A user can reset active PAT and org/project/repository context
+  without losing stored work item and pull request indexes.
+- **SC-003**: The MVP can retrieve and store a valid work item context package
   and a valid pull request session using one shared config model.
-- **SC-003**: A stored pull request can be reviewed one thread at a time across
+- **SC-004**: A stored pull request can be reviewed one thread at a time across
   multiple command invocations without losing state.
-- **SC-004**: Every MVP menu workflow has a documented direct-command
+- **SC-005**: Every MVP menu workflow has a documented direct-command
   equivalent.
-- **SC-005**: Stored work-item and pull-request listings can be filtered to the
+- **SC-006**: Stored work-item and pull-request listings can be filtered to the
   current org/project context with no manual file navigation required.
-- **SC-006**: Work-item and pull-request view commands render stored artifacts
+- **SC-007**: Work-item and pull-request view commands render stored artifacts
   successfully in the console for representative happy-path samples.
 
 ## Assumptions

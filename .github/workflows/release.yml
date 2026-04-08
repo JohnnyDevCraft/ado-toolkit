@@ -1,0 +1,111 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macos-arm64
+            rid: osx-arm64
+            runner: macos-14
+          - target: macos-x64
+            rid: osx-x64
+            runner: macos-13
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish self-contained binary
+        run: |
+          dotnet publish ./src/ado-toolkit.csproj \
+            --configuration Release \
+            --framework net10.0 \
+            --runtime "${{ matrix.rid }}" \
+            --output "./artifacts/${{ matrix.target }}" \
+            -p:PublishSingleFile=true \
+            -p:SelfContained=true \
+            -p:PublishTrimmed=false
+
+      - name: Package archive
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          mkdir -p "./staging/${{ matrix.target }}/ado-toolkit"
+          cp "./artifacts/${{ matrix.target }}/ado" "./staging/${{ matrix.target }}/ado-toolkit/ado"
+          cp ./README.md "./staging/${{ matrix.target }}/ado-toolkit/README.md"
+          tar -C "./staging/${{ matrix.target }}" -czf "./ado-toolkit-${VERSION}-${{ matrix.target }}.tar.gz" "ado-toolkit"
+
+      - name: Upload archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: ./ado-toolkit-*.tar.gz
+
+  homebrew-formula:
+    name: Generate Homebrew formula
+    runs-on: ubuntu-latest
+    needs: build-macos
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dist/homebrew
+
+      - name: Prepare artifact layout
+        run: |
+          mkdir -p ./dist/homebrew/final
+          find ./dist/homebrew -name '*.tar.gz' -exec mv {} ./dist/homebrew/final/ \;
+
+      - name: Generate formula
+        run: |
+          chmod +x ./scripts/package-homebrew.sh
+          VERSION="${GITHUB_REF_NAME#v}" \
+          DIST_DIR="./dist/homebrew/final" \
+          ./scripts/package-homebrew.sh --skip-publish
+
+      - name: Upload formula artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: homebrew-formula
+          path: ./dist/homebrew/final/ado-toolkit.rb
+
+  publish-release:
+    name: Publish GitHub release
+    runs-on: ubuntu-latest
+    needs:
+      - build-macos
+      - homebrew-formula
+
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./release-assets
+
+      - name: Flatten release assets
+        run: |
+          mkdir -p ./release-assets/final
+          find ./release-assets -type f \( -name '*.tar.gz' -o -name 'ado-toolkit.rb' \) -exec cp {} ./release-assets/final/ \;
+
+      - name: Create or update GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release-assets/final/*

@@ -37,6 +37,21 @@ public sealed class CurrentContextService
         await _configService.SaveAsync(config, cancellationToken);
     }
 
+    public async Task SetRepositoryAsync(AppConfig config, RepositoryRef repository, CancellationToken cancellationToken = default)
+    {
+        config.CurrentContext.Repository = repository;
+        await _configService.SaveAsync(config, cancellationToken);
+    }
+
+    public async Task ResetContextAsync(AppConfig config, CancellationToken cancellationToken = default)
+    {
+        config.Pat = null;
+        config.CurrentContext.Organization = null;
+        config.CurrentContext.Project = null;
+        config.CurrentContext.Repository = null;
+        await _configService.SaveAsync(config, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<AdoOrganizationInfo>> LoadOrganizationsAsync(AppConfig config, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(config.Pat))
@@ -82,4 +97,3 @@ public sealed class CurrentContextService
         return projects.First(item => string.Equals(item.Name, choice, StringComparison.OrdinalIgnoreCase));
     }
 }
-

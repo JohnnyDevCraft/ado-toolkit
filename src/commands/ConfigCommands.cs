@@ -61,5 +61,30 @@ public sealed class ConfigCommands
         var choice = _currentContextService.PromptForProject(projects);
         await _currentContextService.SetProjectAsync(config, choice, cancellationToken);
     }
-}
 
+    public Task SetRepositoryAsync(AppConfig config, string repositoryName, string repositoryPath, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(repositoryName))
+        {
+            throw new InvalidOperationException("Repository name is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(repositoryPath))
+        {
+            throw new InvalidOperationException("Repository path is required.");
+        }
+
+        var repository = new RepositoryRef
+        {
+            Name = repositoryName.Trim(),
+            LocalPath = repositoryPath.Trim()
+        };
+
+        return _currentContextService.SetRepositoryAsync(config, repository, cancellationToken);
+    }
+
+    public Task ResetAsync(AppConfig config, CancellationToken cancellationToken = default)
+    {
+        return _currentContextService.ResetContextAsync(config, cancellationToken);
+    }
+}

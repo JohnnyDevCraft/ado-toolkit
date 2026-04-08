@@ -99,6 +99,8 @@ bootstrap.
 - PAT persistence
 - org discovery by PAT
 - project discovery by org + PAT
+- repository name/path persistence
+- configuration reset behavior that preserves stored artifact indexes
 - path configuration for outputs and prompts
 
 **Depends on**: F1
