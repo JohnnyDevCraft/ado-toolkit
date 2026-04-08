@@ -88,11 +88,27 @@ This handoff is intentionally explicit. The ADO Toolkit repository does not auto
 
 1. confirm `/Users/john/Source/repos/xelseor/ado-toolkit/src/ado-toolkit.csproj` contains the intended version
 2. commit the release changes in the application repository
-3. create and push a tag like `v0.1.0`
-4. wait for `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml` to finish
-5. review the uploaded release archives and the generated `ado-toolkit.rb`
-6. copy the generated formula into `JohnnyDevCraft/homebrew-ado-toolkit` under `Formula/ado-toolkit.rb`
-7. publish the tap update after verifying URLs and checksums
+3. push the application repository changes to the remote branch that will carry the release
+4. create and push a tag like `v0.1.0`
+5. wait for `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml` to finish or trigger it deliberately and confirm it completed successfully
+6. review the uploaded release archives and the generated `ado-toolkit.rb`
+7. copy the generated formula into `JohnnyDevCraft/homebrew-ado-toolkit` under `Formula/ado-toolkit.rb`
+8. commit and push the tap repository update after verifying URLs and checksums
+9. only then treat the version as ready for `brew upgrade ado-toolkit`
+
+## Project Release Rule
+
+For this project, a version bump is not considered shipped when it exists only
+in local code or local commits. Homebrew readiness requires both repositories
+and the release automation to be updated:
+
+1. the application repository code is pushed
+2. the release tag is pushed
+3. the GitHub Actions release workflow has produced the release assets
+4. the Homebrew tap repository has the updated formula committed and pushed
+
+If any one of those steps is missing, `brew upgrade ado-toolkit` may still
+resolve to the previous version.
 
 ## Local Dry Run
 
