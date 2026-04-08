@@ -25,9 +25,9 @@ implementation and review of each distribution slice.
 
 **Purpose**: Establish release-packaging folders, version metadata alignment, and baseline documentation anchors.
 
-- [ ] T001 Create Homebrew packaging and release documentation folders in `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/`, `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/`, `/Users/john/Source/repos/xelseor/ado-toolkit/docs/`, and `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/`
-- [ ] T002 Add or normalize release metadata in `/Users/john/Source/repos/xelseor/ado-toolkit/src/ado-toolkit.csproj` so version, description, and repository URL are explicit and usable by packaging flows
-- [ ] T003 [P] Add Homebrew distribution overview sections to `/Users/john/Source/repos/xelseor/ado-toolkit/README.md` and `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` with approval-gated notes for external publish actions
+- [X] T001 Create Homebrew packaging and release documentation folders in `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/`, `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/`, `/Users/john/Source/repos/xelseor/ado-toolkit/docs/`, and `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/`
+- [X] T002 Add or normalize release metadata in `/Users/john/Source/repos/xelseor/ado-toolkit/src/ado-toolkit.csproj` so version, description, and repository URL are explicit and usable by packaging flows
+- [X] T003 [P] Add Homebrew distribution overview sections to `/Users/john/Source/repos/xelseor/ado-toolkit/README.md` and `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` with approval-gated notes for external publish actions
 
 ---
 
@@ -37,10 +37,10 @@ implementation and review of each distribution slice.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create a reusable local packaging script in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` that reads version metadata, publishes the app, packages archives, computes checksums, and writes outputs to `dist/homebrew/`
-- [ ] T005 Create a formula template in `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/ado-toolkit.rb.template` that installs the `ado` executable and validates `ado --help`
-- [ ] T006 [P] Add release workflow scaffolding in `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml` for tagged builds, archive packaging, formula generation, and release asset upload
-- [ ] T007 [P] Add testable helper logic or validation scripts for archive naming, checksum substitution, and formula generation in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` and `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T004 Create a reusable local packaging script in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` that reads version metadata, publishes the app, packages archives, computes checksums, and writes outputs to `dist/homebrew/`
+- [X] T005 Create a formula template in `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/ado-toolkit.rb.template` that installs the `ado` executable and validates `ado --help`
+- [X] T006 [P] Add release workflow scaffolding in `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml` for tagged builds, archive packaging, formula generation, and release asset upload
+- [X] T007 [P] Add testable helper logic or validation scripts for archive naming, checksum substitution, and formula generation in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` and `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
 
 **Checkpoint**: Release packaging foundations are ready for story-level implementation
 
@@ -54,14 +54,14 @@ implementation and review of each distribution slice.
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T008 [P] [US1] Add integration coverage for local packaging outputs and archive naming in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/HomebrewPackagingIntegrationTests.cs`
-- [ ] T009 [P] [US1] Add contract coverage for generated formula content and checksum placeholder substitution in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/contract/HomebrewFormulaContractTests.cs`
+- [X] T008 [P] [US1] Add integration coverage for local packaging outputs and archive naming in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/HomebrewPackagingIntegrationTests.cs`
+- [X] T009 [P] [US1] Add contract coverage for generated formula content and checksum placeholder substitution in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/contract/HomebrewFormulaContractTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement macOS archive packaging logic in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` for the initial supported targets and output naming contract
-- [ ] T011 [US1] Implement formula generation in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` and `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/ado-toolkit.rb.template`
-- [ ] T012 [US1] Document the local review flow, expected outputs, and non-publish boundary in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` and `/Users/john/Source/repos/xelseor/ado-toolkit/README.md`
+- [X] T010 [US1] Implement macOS archive packaging logic in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` for the initial supported targets and output naming contract
+- [X] T011 [US1] Implement formula generation in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` and `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/ado-toolkit.rb.template`
+- [X] T012 [US1] Document the local review flow, expected outputs, and non-publish boundary in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` and `/Users/john/Source/repos/xelseor/ado-toolkit/README.md`
 
 **Checkpoint**: Local packaging is functional and reviewable without publishing anything
 
@@ -75,13 +75,13 @@ implementation and review of each distribution slice.
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T013 [P] [US2] Add workflow validation coverage or fixture-based checks for release archive naming and formula artifact generation in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/HomebrewReleaseWorkflowTests.cs`
+- [X] T013 [P] [US2] Add workflow validation coverage or fixture-based checks for release archive naming and formula artifact generation in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/HomebrewReleaseWorkflowTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Implement tagged release build steps in `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml` for supported macOS runners and self-contained publish outputs
-- [ ] T015 [US2] Implement workflow steps that reuse the packaging script or equivalent logic to generate `ado-toolkit.rb` from actual archive checksums in `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml`
-- [ ] T016 [US2] Document the release-tag process, artifact expectations, and formula handoff steps in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T014 [US2] Implement tagged release build steps in `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml` for supported macOS runners and self-contained publish outputs
+- [X] T015 [US2] Implement workflow steps that reuse the packaging script or equivalent logic to generate `ado-toolkit.rb` from actual archive checksums in `/Users/john/Source/repos/xelseor/ado-toolkit/.github/workflows/release.yml`
+- [X] T016 [US2] Document the release-tag process, artifact expectations, and formula handoff steps in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
 
 **Checkpoint**: Tagged release automation is defined and testable without creating the tap repo yet
 
@@ -95,13 +95,13 @@ implementation and review of each distribution slice.
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T017 [P] [US3] Add documentation validation checks or review checklist coverage for tap repo naming and formula placement in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T017 [P] [US3] Add documentation validation checks or review checklist coverage for tap repo naming and formula placement in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] Document the dedicated tap repository name `homebrew-ado-toolkit` and the required `Formula/ado-toolkit.rb` layout in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
-- [ ] T019 [US3] Document the maintainer handoff steps for copying or publishing the generated formula into the tap repository in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
-- [ ] T020 [US3] Add user-facing tap install instructions that assume the dedicated tap repo exists in `/Users/john/Source/repos/xelseor/ado-toolkit/README.md`
+- [X] T018 [US3] Document the dedicated tap repository name `homebrew-ado-toolkit` and the required `Formula/ado-toolkit.rb` layout in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T019 [US3] Document the maintainer handoff steps for copying or publishing the generated formula into the tap repository in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T020 [US3] Add user-facing tap install instructions that assume the dedicated tap repo exists in `/Users/john/Source/repos/xelseor/ado-toolkit/README.md`
 
 **Checkpoint**: Tap repo design is fully specified and reviewable before any external repo creation
 
@@ -115,13 +115,13 @@ implementation and review of each distribution slice.
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T021 [P] [US4] Add verification coverage for approval-gated publish boundaries in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/HomebrewApprovalBoundaryTests.cs`
+- [X] T021 [P] [US4] Add verification coverage for approval-gated publish boundaries in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/integration/HomebrewApprovalBoundaryTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T022 [US4] Update `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` so it only performs local asset generation and does not create or mutate external repositories
-- [ ] T023 [US4] Update `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` and `/Users/john/Source/repos/xelseor/ado-toolkit/README.md` to make approval gates explicit before tap repo creation or publish-time changes
-- [ ] T024 [US4] Add maintainer notes in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` clarifying that creation of `homebrew-ado-toolkit` happens only after separate approval
+- [X] T022 [US4] Update `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh` so it only performs local asset generation and does not create or mutate external repositories
+- [X] T023 [US4] Update `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` and `/Users/john/Source/repos/xelseor/ado-toolkit/README.md` to make approval gates explicit before tap repo creation or publish-time changes
+- [X] T024 [US4] Add maintainer notes in `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md` clarifying that creation of `homebrew-ado-toolkit` happens only after separate approval
 
 **Checkpoint**: The distribution design preserves the review boundary you requested
 
@@ -131,9 +131,9 @@ implementation and review of each distribution slice.
 
 **Purpose**: Final cleanup, consistency checks, and review prep across the full Homebrew feature
 
-- [ ] T025 [P] Add a short release artifact matrix and naming examples to `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
-- [ ] T026 [P] Run full verification for packaging-related tests and fix any cross-story regressions in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/`
-- [ ] T027 Validate the local packaging command, release docs, and formula template together in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh`, `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/ado-toolkit.rb.template`, and `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T025 [P] Add a short release artifact matrix and naming examples to `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
+- [X] T026 [P] Run full verification for packaging-related tests and fix any cross-story regressions in `/Users/john/Source/repos/xelseor/ado-toolkit/tests/`
+- [X] T027 Validate the local packaging command, release docs, and formula template together in `/Users/john/Source/repos/xelseor/ado-toolkit/scripts/package-homebrew.sh`, `/Users/john/Source/repos/xelseor/ado-toolkit/packaging/homebrew/ado-toolkit.rb.template`, and `/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md`
 
 ---
 

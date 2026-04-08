@@ -50,17 +50,21 @@ fi
 
 mkdir -p "$DIST_DIR"
 
-declare -A RID_MAP=(
-  ["macos-arm64"]="osx-arm64"
-  ["macos-x64"]="osx-x64"
+TARGETS=(
+  "macos-arm64:osx-arm64"
+  "macos-x64:osx-x64"
 )
 
-for target in "${!RID_MAP[@]}"; do
-  rid="${RID_MAP[$target]}"
+for mapping in "${TARGETS[@]}"; do
+  target="${mapping%%:*}"
+  rid="${mapping##*:}"
   publish_dir="$DIST_DIR/publish/$target"
   archive_root="$DIST_DIR/staging/$target/ado-toolkit"
 
-  rm -rf "$publish_dir" "$archive_root"
+  if [[ "$SKIP_PUBLISH" != "true" ]]; then
+    rm -rf "$publish_dir"
+  fi
+  rm -rf "$archive_root"
   mkdir -p "$publish_dir" "$archive_root"
 
   if [[ "$SKIP_PUBLISH" != "true" ]]; then

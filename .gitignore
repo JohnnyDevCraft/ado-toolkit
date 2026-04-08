@@ -7,4 +7,4 @@ packages/
 .idea/
 .vscode/
 TestResults/
-
+dist/

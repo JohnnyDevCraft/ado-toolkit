@@ -25,7 +25,7 @@ Run `ado` with no arguments to open the interactive menu.
 
 ## Homebrew Packaging
 
-The repo is prepared to ship as a tap-friendly Homebrew package with macOS release archives and a generated formula. The current approved slice is local packaging and review only. We will review release automation separately before turning on any publish flow.
+The repo is prepared to ship as a tap-friendly Homebrew package with macOS release archives, a generated formula, and a documented tap handoff to `homebrew-ado-toolkit`.
 
 Local packaging:
 
@@ -40,12 +40,31 @@ That produces:
 - `dist/homebrew/ado-toolkit-<version>-macos-x64.tar.gz`
 - `dist/homebrew/ado-toolkit.rb`
 
-Review boundary:
+Local packaging boundary:
 
 - these outputs are generated locally for review first
 - no tap repository is created by this packaging flow
 - no GitHub release is created by this packaging flow
-- release automation will be reviewed in the next feature phase before we ship it
+
+Release automation:
+
+- tag a release as `v<version>`
+- GitHub Actions builds both macOS archives
+- the workflow generates a Homebrew formula from the archive checksums
+- the workflow uploads both tarballs and the formula as release assets
+
+Tap handoff:
+
+- dedicated tap repo name: `homebrew-ado-toolkit`
+- formula path in that repo: `Formula/ado-toolkit.rb`
+- tap updates remain a deliberate maintainer step
+
+User install path:
+
+```bash
+brew tap JohnnyDevCraft/homebrew-ado-toolkit
+brew install ado-toolkit
+```
 
 Tap flow details live in [homebrew-release.md](/Users/john/Source/repos/xelseor/ado-toolkit/docs/homebrew-release.md).
 
